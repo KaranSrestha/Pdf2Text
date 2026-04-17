@@ -11,21 +11,29 @@ app.use(cors());
 const port = 3000;
 
 app.post("/extract", async (req, res) => {
-    try{
-        const {file1, file2} = req.body;
-        const buffer1 = Buffer.from(file1, "base64");
-        const buffer2 = Buffer.from(file2, "base64");
+    try {
+        let { file1, file2 } = req.body;
+
+        const cleanBase64 = (str) => {
+            if (typeof str === 'string') {
+                return str.replace(/^["']|["']$/g, '');
+            }
+            return str;
+        };
+
+        const buffer1 = Buffer.from(cleanBase64(file1), "base64");
+        const buffer2 = Buffer.from(cleanBase64(file2), "base64");
 
         const data1 = await pdfParse(buffer1);
         const data2 = await pdfParse(buffer2);
 
-        res.json({text1: data1.text, text2: data2.text}).status(200);
-    }catch(e){
-        console.log(e);
+        res.status(200).json({ text1: data1.text, text2: data2.text });
+    } catch (e) {
+        console.error(e);
         res.status(500).send("Error extracting text");
     }
-})
+});
 
 app.listen(port, () => {
     console.log("Server is up at " + port);
-})
+});
