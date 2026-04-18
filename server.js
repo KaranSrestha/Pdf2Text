@@ -23,7 +23,7 @@ app.post("/extract", async (req, res) => {
         res.status(200).json({ text1: data1.text, text2: data2.text });
     } catch (e) {
         console.error(e);
-        res.status(500).json({"text1": e, "text2": "Error"});
+        res.status(500).json({"text1": e.message, "text2": "Error"});
     }
 });
 
