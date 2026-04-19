@@ -14,8 +14,8 @@ app.post("/extract", async (req, res) => {
     try {
         let { file1, file2 } = req.body;
 
-        const buffer1 = Buffer.from(file1, "base64");
-        const buffer2 = Buffer.from(file2, "base64");
+        const buffer1 = Buffer.from(file1.trim(), "base64");
+        const buffer2 = Buffer.from(file2.trim(), "base64");
 
         const data1 = await pdfParse(buffer1);
         const data2 = await pdfParse(buffer2);
